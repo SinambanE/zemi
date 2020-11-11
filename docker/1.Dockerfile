@@ -1,5 +1,7 @@
 FROM ubuntu:latest
 
-RUN echo "イカ二貫!" > message.txt
+RUN apt-get update \
+    && apt-get install -y git \
+    && echo "Welcome!" > test.txt
 
-CMD ["/bin/cat", "message.txt"]
+CMD ["/bin/cat", "test.txt"]
