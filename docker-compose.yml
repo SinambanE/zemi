@@ -1,0 +1,66 @@
+version: "3.7"
+# networks:
+#   dev-network:
+#   my-network:
+services:
+  app1:
+    image: zemi/testapp:latest
+    container_name: zemi_app1
+    environment:
+      - NODE_ENV=小さいキュン
+      - EXTERNAL_PORT=8080
+      - CONTAINER_PORT=8080
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - 8080:8080
+    tty: true
+    stdin_open: true
+    links:
+      - "db:database"
+    depends_on: 
+      - db
+    networks:
+      dev-network:
+        aliases:
+          - "one"
+      my-network:
+       aliases:
+          - "ichi"
+
+  app2:
+    image: zemi/testapp:latest
+    container_name: zemi_app2
+    environment:
+      - NODE_ENV=大きいキュン
+      - EXTERNAL_PORT=9090
+      - CONTAINER_PORT=8080
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    ports:
+      - 9090:8080
+    tty: true
+    stdin_open: true
+    # links:
+    #   - "db:databaseeeeee"
+    depends_on: 
+      - db
+    # networks:
+    #   - "dev-network"
+    #   - "my-network"
+
+  db:
+    image: mysql:5.7.32
+    container_name: zemi_db
+    # networks:
+    #   - "dev-network"
+    #   - "my-network"
+    ports: 
+            - 3306:3306
+    volumes:
+            - ./mysql/my.cnf:/etc/mysql/my.cnf
+    environment:
+            - MYSQL_DATABASE=zemi
+            - MYSQL_ROOT_PASSWORD=zemi
